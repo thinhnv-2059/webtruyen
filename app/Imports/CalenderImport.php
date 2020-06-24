@@ -30,13 +30,18 @@ class CalenderImport implements ToModel
                         $buoihoc = explode(" tiết ", trim($ngayhoc[$j]));
                         $tiet = explode(" tại ", trim($buoihoc[1]));
                         $startdate = Carbon::create($newformatstart);
-                        for ($x = $startdate; $x < $enddate; $x->addDay()) { 
+                        for ($x = $startdate; $x < $enddate; $x->addDay()) {
                             if($x->dayOfWeek == trim($buoihoc[0]) - 1){
                                 $data["user_id"] = 1;
                                 $data["date"] = $x;
                                 $data["class"] = $row[5];
                                 $data["lesson"] = $tiet[0];
-                                $data["location"] = $tiet[1];
+                                if (isset($tiet[1])) {
+                                    $data["location"] = $tiet[1];
+                                } else {
+                                    $data["location"] = "N/A";
+                                }
+
                                 $user = Schedule::create($data);
                             };
                         }
